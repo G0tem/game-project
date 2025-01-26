@@ -7,15 +7,18 @@ import httpx
 
 app = FastAPI()
 
+
 class Bet(BaseModel):
     id: str
     event_id: str
     amount: float
     status: str = "pending"
 
+
 bets: List[Bet] = []
 
-LINE_PROVIDER_URL = "http://line-provider:8000"
+LINE_PROVIDER_URL = "http://line-provider:8080"
+
 
 @app.get("/events")
 async def get_events():
@@ -26,6 +29,7 @@ async def get_events():
         events = response.json()
         current_time = time.time()
         return [event for event in events if event["deadline"] > current_time]
+
 
 @app.post("/bet")
 async def place_bet(event_id: str, amount: float):
@@ -41,16 +45,21 @@ async def place_bet(event_id: str, amount: float):
     bets.append(bet)
     return bet
 
+
+@app.post("/update_bet_status")
+async def update_bet_status(event_id: str, state: str):
+    print(event_id, state)
+    for bet in bets:
+        if bet.event_id == event_id:
+            if state == "FINISHED_WIN":
+                bet.status = "win"
+                print("изменил")
+            elif state == "FINISHED_LOSE":
+                bet.status = "lose"
+                print("изменил")
+    return {"message": "Bet status updated"}
+
+
 @app.get("/bets")
 async def get_bets():
-    # Обновляем статусы ставок на основе событий
-    async with httpx.AsyncClient() as client:
-        for bet in bets:
-            response = await client.get(f"{LINE_PROVIDER_URL}/event/{bet.event_id}")
-            if response.status_code == 200:
-                event = response.json()
-                if event["state"] == "FINISHED_WIN":
-                    bet.status = "win"
-                elif event["state"] == "FINISHED_LOSE":
-                    bet.status = "lose"
     return bets
