@@ -48,15 +48,14 @@ async def place_bet(event_id: str, amount: float):
 
 @app.post("/update_bet_status")
 async def update_bet_status(event_id: str, state: str):
-    print(event_id, state)
     for bet in bets:
         if bet.event_id == event_id:
             if state == "FINISHED_WIN":
                 bet.status = "win"
-                print("изменил")
+
             elif state == "FINISHED_LOSE":
                 bet.status = "lose"
-                print("изменил")
+
     return {"message": "Bet status updated"}
 
 

@@ -55,7 +55,6 @@ async def create_event(event: Event):
     for p_name, p_value in event.dict(exclude_unset=True).items():
         setattr(events[event.event_id], p_name, p_value)
 
-    # Если статус события изменился, отправляем callback в bet-maker
     if event.state in [EventState.FINISHED_WIN, EventState.FINISHED_LOSE]:
         await notify_bet_maker(event.event_id, event.state)
 
