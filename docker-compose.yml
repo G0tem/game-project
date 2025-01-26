@@ -19,6 +19,13 @@ services:
     networks:
       - betting-network
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - betting-network
+
 networks:
   betting-network:
     driver: bridge
