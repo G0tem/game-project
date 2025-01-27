@@ -1,10 +1,11 @@
 import httpx
 from schemas import Event
 import time
-
+from fastapi import HTTPException
 from schemas import EventState
 
-BET_MAKER_CALLBACK_URL = "http://bet-maker:8000/update_bet_status"
+
+BET_MAKER_CALLBACK_URL = "http://bet-maker:8000/api/v1/update_bet_status"
 
 
 events: dict[str, Event] = {
@@ -62,6 +63,8 @@ class LineProviderRepository:
     async def get_event_by_id(event_id: str) -> Event:
         if event_id in events:
             return events[event_id]
+        else:
+            raise HTTPException(status_code=404, detail="Event not found")
 
     @staticmethod
     async def get_events() -> list[Event]:
