@@ -1,7 +1,17 @@
 # game-project
 
-* line-provider
-docker build . -t line-provider
-docker run -p 8080:8080 line-provider
 
+Логика приложения с двумя микросервисами.
+
+
+
+запуск из корня директории командой  ```docker compose up -d --build```
+
+Запускаются 3 контейнера: 
+
+* line-provider
 * det-maker
+* Redis
+
+При изменении события в line-provider реализовано автоматическое обновление результата в сервисе det-maker.
+Данные для простоты хранятся в Redis, примеры с другими реляционными бд есть в соседних репозиториях.
