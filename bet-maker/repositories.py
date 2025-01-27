@@ -53,7 +53,7 @@ class BetMakerRepository:
         return {"message": "Bet status updated"}
 
     @staticmethod
-    async def get_bets() -> list[dict]:
+    async def get_bets() -> list[Bet]:
         bets = []
         async for key in redis_client.scan_iter("bet:*"):
             bet_data = await redis_client.hgetall(key)
