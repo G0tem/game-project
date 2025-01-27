@@ -18,7 +18,7 @@ class Bet(BaseModel):
     status: str = "pending"
 
 
-LINE_PROVIDER_URL = "http://line-provider:8080"
+LINE_PROVIDER_URL = "http://line-provider:8080/api/v1"
 
 
 @app.on_event("startup")
